@@ -1,0 +1,6 @@
+
+*.vsidx
+.vs/CSharpInvokingMethodsDynamically/v17/.suo
+.vs/CSharpInvokingMethodsDynamically/FileContentIndex/read.lock
+*.dll
+*.exe
