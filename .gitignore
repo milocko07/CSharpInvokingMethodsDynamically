@@ -4,3 +4,8 @@
 .vs/CSharpInvokingMethodsDynamically/FileContentIndex/read.lock
 *.dll
 *.exe
+*.bin
+*.v2
+*.pdb
+CSharpInvokingMethodsDynamically.ClientConsole/obj/CSharpInvokingMethodsDynamically.ClientConsole.csproj.nuget.dgspec.json
+CSharpInvokingMethodsDynamically.ClientConsole/obj/Debug/net7.0/.NETCoreApp,Version=v7.0.AssemblyAttributes.cs
