@@ -1,19 +1,95 @@
 ﻿namespace CSharpInvokingMethodsDynamically.Core;
 
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
 public static class DynamicExecution
 {
-    const string CLASS_NAME = "DynamicMethodClass";
-    static readonly string template = "using System; \n" +
+    private const string CLASS_NAME = "DynamicMethodClass";
+    private static readonly string template = "using System; \n" +
         "public class {0} {{\n" +
         "\t{1}\n" +
         "}}";
-        //$"public static object DynamicMethod(object {parameters}) {{ {methodBody} }}
-        //"{0}" +
-        //"} }";
+    //$"public static object DynamicMethod(object {parameters}) {{ {methodBody} }}
+    //"{0}" +
+    //"} }";
+
+    public static List<string> GetMethodParameters(string? methodBody)
+    {
+        List<string> parameters = new List<string>();
+
+        if (methodBody == null)
+        {
+            return parameters;
+        }
+
+        // Extract parameters using regular expression
+        Match match = Regex.Match(methodBody, @"\((.*?)\)");
+        if (match.Success)
+        {
+            string paramString = match.Groups[1].Value;
+
+            if (string.IsNullOrEmpty(paramString))
+            {
+                return parameters;
+            }
+
+            string[] paramArray = paramString.Split(',');
+
+            foreach (var param in paramArray)
+            {
+                string trimmedParam = param.Trim();
+                string[] paramParts = trimmedParam.Split(' ');
+                if (paramParts.Length >= 2)
+                {
+                    string paramType = paramParts[0];
+                    string paramName = paramParts[1];
+                    string paramWithType = $"{paramType} {paramName}";
+                    parameters.Add(paramWithType);
+                }
+                else if (paramParts.Length == 1)
+                {
+                    // If the parameter has no type specified (likely variable name only)
+                    parameters.Add(paramParts[0]);
+                }
+            }
+        }
+
+        return parameters;
+    }
+
+    public static TypeCode GetTypeCodeFromString(string typeString)
+    {
+        switch (typeString.ToLower())
+        {
+            case "boolean":
+                return TypeCode.Boolean;
+            case "byte":
+                return TypeCode.Byte;
+            case "int16":
+                return TypeCode.Int16;
+            case "int":
+                return TypeCode.Int32;
+            case "int32":
+                return TypeCode.Int32;
+            case "int64":
+                return TypeCode.Int64;
+            case "single":
+                return TypeCode.Single;
+            case "double":
+                return TypeCode.Double;
+            case "char":
+                return TypeCode.Char;
+            case "string":
+                return TypeCode.String;
+            // Add more cases for other type strings...
+
+            default:
+                return TypeCode.Object; // Default to Object if the type string is unknown.
+        }
+    }
 
     public static object? ExecuteMethod(string? methodBody, string[]? parameterNames, string[]? parameterValues, TypeCode[]? parameterTypes)
     {
@@ -22,9 +98,10 @@ public static class DynamicExecution
             throw new ArgumentException("Missing method body.");
         }
 
-        if (parameterNames != null && parameterValues != null && parameterNames.Length != parameterValues.Length)
+        if (parameterNames != null && parameterValues != null && parameterTypes != null
+            && parameterNames.Length != parameterValues.Length && parameterValues.Length != parameterTypes.Length)
         {
-            throw new ArgumentException("Mismatch between parameter names and parameter values.");
+            throw new ArgumentException("Mismatch between parameter names-values-types.");
         }
 
         if (parameterNames != null && parameterNames.Count(p => string.IsNullOrEmpty(p.Trim())) == parameterNames.Length)
@@ -35,6 +112,11 @@ public static class DynamicExecution
         if (parameterValues != null && parameterValues.Count(p => string.IsNullOrEmpty(p.ToString().Trim())) == parameterValues.Length)
         {
             throw new ArgumentException("Some parameter values are empty.");
+        }
+
+        if (parameterTypes != null && parameterTypes.Count(p => string.IsNullOrEmpty(p.ToString().Trim())) == parameterTypes.Length)
+        {
+            throw new ArgumentException("Some parameter types are empty.");
         }
 
         string code = string.Format(template, CLASS_NAME, methodBody);
