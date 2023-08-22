@@ -8,15 +8,15 @@ using Microsoft.CodeAnalysis.CSharp;
 public static class DynamicExecution
 {
     private const string CLASS_NAME = "DynamicMethodClass";
-    private static readonly string template = "using System; \n" +
+    private const string ASSEMBLY_NAME = "DynamicMethodAssembly";
+
+    private static readonly string codeTemplate =
+        "using System; \n" +
         "public class {0} {{\n" +
         "\t{1}\n" +
         "}}";
-    //$"public static object DynamicMethod(object {parameters}) {{ {methodBody} }}
-    //"{0}" +
-    //"} }";
 
-    public static List<string> GetMethodParameters(string? methodBody)
+    public static List<string> ExtractParametersFromMethod(string? methodBody)
     {
         List<string> parameters = new List<string>();
 
@@ -60,7 +60,7 @@ public static class DynamicExecution
         return parameters;
     }
 
-    public static TypeCode GetTypeCodeFromString(string typeString)
+    public static TypeCode ConvertParameterTypeFromString(string typeString)
     {
         switch (typeString.ToLower())
         {
@@ -91,7 +91,23 @@ public static class DynamicExecution
         }
     }
 
-    public static object? ExecuteMethod(string? methodBody, string[]? parameterNames, string[]? parameterValues, TypeCode[]? parameterTypes)
+    public static object? ExecuteMethod(string? methodBody, 
+        string[]? parameterNames, string[]? parameterValues, TypeCode[]? parameterTypes)
+    {
+        ValidateMethod(methodBody, parameterNames, parameterValues, parameterTypes);
+
+        string code = string.Format(codeTemplate, CLASS_NAME, methodBody);
+
+        Assembly? assembly = CreateDynamicAssembly(code);
+
+        // Get the dynamic Class type and the corresponding dynamic method.
+        Type? dynamicMethodClassType = assembly.GetType(CLASS_NAME);
+        MethodInfo? dynamicMethod = dynamicMethodClassType?.GetMethods().FirstOrDefault();
+
+        return InvokeMethod(parameterNames, parameterValues, parameterTypes, dynamicMethod);
+    }
+
+    private static void ValidateMethod(string? methodBody, string[]? parameterNames, string[]? parameterValues, TypeCode[]? parameterTypes)
     {
         if (string.IsNullOrEmpty(methodBody))
         {
@@ -118,58 +134,75 @@ public static class DynamicExecution
         {
             throw new ArgumentException("Some parameter types are empty.");
         }
+    }
 
-        string code = string.Format(template, CLASS_NAME, methodBody);
-        
-        // Compile the code and create an assembly
-        var compilation = CSharpCompilation
-            .Create("DynamicMethodAssembly")
-            .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
-            //.AddReferences(AppDomain.CurrentDomain.GetAssemblies())
-            .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
-            .AddSyntaxTrees(CSharpSyntaxTree.ParseText(code));
-
+    /// <summary>
+    /// Compiles the code and creates a dynamic assembly.
+    /// </summary>
+    /// <param name="code">code to compile and load.</param>
+    /// <returns>Assembly loaded.</returns>
+    private static Assembly CreateDynamicAssembly(string code)
+    {
         Assembly? assembly = null;
+
         using (var memoryStream = new MemoryStream())
         {
-            var compilationResult = compilation.Emit(memoryStream);
-            if (!compilationResult.Success)
-            {
-                throw new InvalidOperationException("Compilation failed.");
-            }
-
+            CompileMethod(code, memoryStream);
             assembly = Assembly.Load(memoryStream.ToArray());
         }
-       
+
         if (assembly == null)
         {
             throw new Exception("Dynamic assembly was not loaded properly.");
         }
 
-        // Get the DynamicMehodClass type and the correspond dynamicMethod method.
-        Type? dynamicMethodClassType = assembly.GetType(CLASS_NAME);
-        MethodInfo? dynamicMethod = dynamicMethodClassType?.GetMethods().FirstOrDefault();
+        return assembly;
+    }
 
-        // Invoke the method.
-        if (parameterNames == null && parameterValues == null)
+    private static void CompileMethod(string code, MemoryStream memoryStream)
+    {
+        var compilation = CSharpCompilation
+                    .Create(ASSEMBLY_NAME)
+                    .WithOptions(new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+                    .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
+                    .AddSyntaxTrees(CSharpSyntaxTree.ParseText(code));
+
+        var compilationResult = compilation.Emit(memoryStream);
+        if (!compilationResult.Success)
+        {
+            string errorMessages = string.Empty;
+            foreach (var error in compilationResult.Diagnostics)
+            {
+                errorMessages += error.GetMessage().ToString() + "\n";
+            }
+            throw new InvalidOperationException($"Compilation failed:\n{errorMessages}");
+        }
+    }
+
+    /// <summary>
+    /// Allows to execute the method with or without parameters.
+    /// </summary>
+    /// <param name="parameterNames"></param>
+    /// <param name="parameterValues"></param>
+    /// <param name="parameterTypes"></param>
+    /// <param name="dynamicMethod"></param>
+    /// <returns></returns>
+    private static object? InvokeMethod(string[]? parameterNames, string[]? parameterValues, TypeCode[]? parameterTypes, MethodInfo? dynamicMethod)
+    {
+        if (parameterNames == null && parameterValues == null && parameterTypes == null)
         {
             return dynamicMethod?.Invoke(null, null);
         }
         else
         {
             // Convert parameter values to appropriate types
-            var parameters = string.Join(",", parameterNames);
             object[] parsedParameters = new object[parameterValues.Length];
             for (int i = 0; i < parameterValues.Length; i++)
             {
-                //parsedParameters[i] = Convert.ChangeType(parameterValues[i].Trim(), typeof(object));
-                //parsedParameters[i] = int.Parse(parameterValues[i].Trim().ToString());
                 parsedParameters[i] = Convert.ChangeType(parameterValues[i], parameterTypes[i]);
             }
 
             return dynamicMethod?.Invoke(null, parsedParameters);
         }
     }
-
-    public static int DynamicMethod(int param1) { return param1 + 2; }
 }

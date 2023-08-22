@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: Splitted
+
+using System.Reflection;
 using System.Text.RegularExpressions;
 using CSharpInvokingMethodsDynamically.Core;
 
@@ -11,7 +13,7 @@ class Program
         Console.WriteLine("Enter C# method body:");
         string? methodBody = Console.ReadLine();
 
-        List<string> parameters = DynamicExecution.GetMethodParameters(methodBody);
+        List<string> parameters = DynamicExecution.ExtractParametersFromMethod(methodBody);
 
         List<string>? parameterNames = null;
         List<string>? parameterValues = null;
@@ -29,35 +31,9 @@ class Program
                 parameterValues.Add(Console.ReadLine());
                 var paramSplitted = parameter?.Split(' ');
                 parameterNames.Add(paramSplitted.Last());
-                parameterTypes.Add(DynamicExecution.GetTypeCodeFromString(paramSplitted.First()));
+                parameterTypes.Add(DynamicExecution.ConvertParameterTypeFromString(paramSplitted.First()));
             }
         }
-
-        //Console.WriteLine("Enter parameter names (comma-separated):");
-        //string paramNames = Console.ReadLine();
-        //string[]? parameterNames = null;
-        //if (!string.IsNullOrEmpty(paramNames?.Trim()))
-        //{
-        //    parameterNames = paramNames?.Split(',');
-        //}
-
-        //Console.WriteLine("Enter parameter values (comma-separated):");
-        //string? paramValues = Console.ReadLine();
-        //if (!string.IsNullOrEmpty(paramValues?.Trim()))
-        //{
-        //    parameterValues = paramValues?.Split(',');
-        //}
-
-        //Console.WriteLine("Enter parameter type (comma-separated):");
-        //string? paramTypes = Console.ReadLine();
-        //if (!string.IsNullOrEmpty(paramTypes?.Trim()))
-        //{
-        //    parameterTypes = new List<TypeCode>();
-        //    foreach (var type in paramTypes.Split(','))
-        //    {
-        //        parameterTypes.Add(GetTypeCodeFromString(type));
-        //    }
-        //}
 
         try
         {
@@ -71,71 +47,6 @@ class Program
             Console.WriteLine("Error: " + ex.Message);
         }
 
-        //Console.WriteLine("Enter parameter names (comma-separated):");
-        //string paramNames = Console.ReadLine();
-        //string[]? parameterNames = null;
-        //if (!string.IsNullOrEmpty(paramNames?.Trim()))
-        //{
-        //    parameterNames = paramNames?.Split(',');
-        //}
-
-        //Console.WriteLine("Enter parameter values (comma-separated):");
-        //string? paramValues = Console.ReadLine();
-        //string[]? parameterValues = null;
-        //if (!string.IsNullOrEmpty(paramValues?.Trim()))
-        //{
-        //    parameterValues = paramValues?.Split(',');
-        //}
-
-        //Console.WriteLine("Enter parameter type (comma-separated):");
-        //string? paramTypes = Console.ReadLine();
-        //List<TypeCode>? parameterTypes = null;
-        //if (!string.IsNullOrEmpty(paramTypes?.Trim()))
-        //{
-        //    parameterTypes = new List<TypeCode>();
-        //    foreach (var type in paramTypes.Split(','))
-        //    {
-        //        parameterTypes.Add(GetTypeCodeFromString(type));
-        //    }
-        //}
-
-        //try
-        //{
-        //    // Compile and execute the method with parameters
-        //    object? result = DynamicExecution.ExecuteMethod(methodBody, parameterNames, parameterValues, parameterTypes?.ToArray());
-
-        //    Console.WriteLine("Result: " + result);
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine("Error: " + ex.Message);
-        //}
-
-        Console.ReadLine(); // Pause before exiting
+        Console.ReadLine();
     }
-
-    
-
-    //static List<string> GetMethodParameters(string methodBody)
-    //{
-    //    List<string> parameters = new List<string>();
-
-    //    // Extract parameters using regular expression
-    //    Match match = Regex.Match(methodBody, @"\((.*?)\)");
-    //    if (match.Success)
-    //    {
-    //        string paramString = match.Groups[1].Value;
-    //        string[] paramArray = paramString.Split(',');
-
-    //        foreach (var param in paramArray)
-    //        {
-    //            string trimmedParam = param.Trim();
-    //            parameters.Add(trimmedParam);
-    //        }
-    //    }
-
-    //    return parameters;
-    //}
-
-    
 }
