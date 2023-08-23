@@ -9,7 +9,7 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <Image
+            <!--<Image
                 Source="dotnet_bot.png"
                 SemanticProperties.Description="Cute dot net bot waving hi to you!"
                 HeightRequest="200"
@@ -33,7 +33,16 @@
                 Text="Click me"
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+                HorizontalOptions="Center" />-->
+
+            <Label Text="Enter C# method body:"/>
+            <Editor x:Name="MethodEditor" HeightRequest="300" Unfocused ="MethodEditor_Unfocused"/>
+
+            <Label Text="Enter parameter values (comma-separated):"/>
+            <Entry x:Name="parametersEntry"/>
+
+            <Button x:Name="ExecuteCode" Text="Execute Code" IsEnabled="False" Clicked="ExecuteCode_Clicked"/>
+            <Label x:Name="resultLabel" />
 
         </VerticalStackLayout>
     </ScrollView>
