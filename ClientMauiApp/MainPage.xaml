@@ -1,7 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ClientMauiApp"
              x:Class="ClientMauiApp.MainPage">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="EntryTemplate">
+            <Entry Placeholder="{Binding Placeholder}" Text="{Binding Text}" />
+        </DataTemplate>
+    </ContentPage.Resources>
 
     <ScrollView>
         <VerticalStackLayout
@@ -9,40 +16,21 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <!--<Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
-
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />-->
-
             <Label Text="Enter C# method body:"/>
-            <Editor x:Name="MethodEditor" HeightRequest="300" Unfocused ="MethodEditor_Unfocused"/>
+            <Editor x:Name="MethodEditor" HeightRequest="300" Unfocused="MethodEditor_Completed"/>
 
-            <Label Text="Enter parameter values (comma-separated):"/>
-            <Entry x:Name="parametersEntry"/>
+            <Label x:Name="ParameterLabel" Text="Enter parameter values:" IsVisible="False"/>
+
+            <CollectionView ItemsSource="{Binding ParameterEntries}" 
+                            ItemTemplate="{StaticResource EntryTemplate}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="1" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
 
             <Button x:Name="ExecuteCode" Text="Execute Code" IsEnabled="False" Clicked="ExecuteCode_Clicked"/>
-            <Label x:Name="resultLabel" />
+            <Label x:Name="ResultLabel" Text="Result:" />
+            <Label x:Name="Result" />
 
         </VerticalStackLayout>
     </ScrollView>
