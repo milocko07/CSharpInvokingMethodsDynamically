@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpInvokingMethodsDynami
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpInvokingMethodsDynamically.ClientConsole", "CSharpInvokingMethodsDynamically.ClientConsole\CSharpInvokingMethodsDynamically.ClientConsole.csproj", "{CD9238A8-3CE6-4C75-8261-4945D23C36EE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientMauiApp", "ClientMauiApp\ClientMauiApp.csproj", "{5E7E36BD-27F7-424D-A579-73F967882791}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,12 @@ Global
 		{CD9238A8-3CE6-4C75-8261-4945D23C36EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD9238A8-3CE6-4C75-8261-4945D23C36EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD9238A8-3CE6-4C75-8261-4945D23C36EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E7E36BD-27F7-424D-A579-73F967882791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E7E36BD-27F7-424D-A579-73F967882791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E7E36BD-27F7-424D-A579-73F967882791}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5E7E36BD-27F7-424D-A579-73F967882791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E7E36BD-27F7-424D-A579-73F967882791}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E7E36BD-27F7-424D-A579-73F967882791}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
