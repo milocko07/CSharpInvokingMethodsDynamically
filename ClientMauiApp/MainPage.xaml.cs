@@ -7,7 +7,6 @@ namespace ClientMauiApp
     {
         public ObservableCollection<Entry> ParameterEntries { get; } = new ObservableCollection<Entry>();
 
-
         public MainPage()
         {
             InitializeComponent();
@@ -15,12 +14,11 @@ namespace ClientMauiApp
 
         private void MethodEditor_Completed(object sender, EventArgs e)
         {
+            ExecuteCode.IsEnabled = true;
+            ParameterEntries.Clear();
             if (!string.IsNullOrEmpty(MethodEditor.Text?.Trim()))
             {
-                ExecuteCode.IsEnabled = true;
-                ParameterEntries.Clear();
                 List<string> parameters = DynamicExecution.ExtractParametersFromMethod(MethodEditor.Text);
-
                 if (parameters.Any())
                 {
                     ParameterLabel.IsVisible = true;
@@ -30,9 +28,7 @@ namespace ClientMauiApp
                         {
                             Placeholder = $"Enter parameter value for parameter: {parameter}",
                             IsEnabled = true,
-                            Text = "",
-                            
-                            
+                            Text = string.Empty,
                         });
                     }
                 }
@@ -42,11 +38,6 @@ namespace ClientMauiApp
                 }
 
                 BindingContext = this;
-            }
-            else
-            {
-                ExecuteCode.IsEnabled = false;
-                ParameterEntries.Clear();
             }
         }
 
@@ -83,7 +74,8 @@ namespace ClientMauiApp
             try
             {
                 // Compile and execute the method with parameters
-                object? result = DynamicExecution.ExecuteMethod(MethodEditor.Text, parameterNames?.ToArray(), parameterValues?.ToArray(), parameterTypes?.ToArray());
+                object? result = DynamicExecution.ExecuteMethod(MethodEditor.Text,
+                    parameterNames?.ToArray(), parameterValues?.ToArray(), parameterTypes?.ToArray());
                 Result.Text = result.ToString();
             }
             catch (Exception ex)

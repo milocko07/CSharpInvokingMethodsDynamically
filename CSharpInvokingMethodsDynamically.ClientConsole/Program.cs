@@ -1,7 +1,5 @@
 ﻿// Ignore Spelling: Splitted
 
-using System.Reflection;
-using System.Text.RegularExpressions;
 using CSharpInvokingMethodsDynamically.Core;
 
 namespace CSharpInvokingMethodsDynamically.ClientConsole;
@@ -38,7 +36,8 @@ class Program
         try
         {
             // Compile and execute the method with parameters
-            object? result = DynamicExecution.ExecuteMethod(methodBody, parameterNames?.ToArray(), parameterValues?.ToArray(), parameterTypes?.ToArray());
+            object? result = DynamicExecution.ExecuteMethod(methodBody,
+                parameterNames?.ToArray(), parameterValues?.ToArray(), parameterTypes?.ToArray());
 
             Console.WriteLine("Result: " + result);
         }
