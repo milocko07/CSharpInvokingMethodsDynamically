@@ -46,11 +46,17 @@ namespace ClientMauiApp
             else
             {
                 ExecuteCode.IsEnabled = false;
+                ParameterEntries.Clear();
             }
         }
 
-        private void ExecuteCode_Clicked(object sender, EventArgs e)
+        private async void ExecuteCode_Clicked(object sender, EventArgs e)
         {
+            await Task.Delay(1000);
+            MethodEditor.IsEnabled = false;
+            ExecuteCode.IsVisible = false;
+            Result.Text = string.Empty;
+
             List<string> parameters = DynamicExecution.ExtractParametersFromMethod(MethodEditor.Text);
 
             List<string>? parameterNames = null;
@@ -83,6 +89,9 @@ namespace ClientMauiApp
             {
                 Result.Text = "Error: " + ex.Message;
             }
+
+            MethodEditor.IsEnabled = true;
+            ExecuteCode.IsVisible = true;
         }
     }
 }

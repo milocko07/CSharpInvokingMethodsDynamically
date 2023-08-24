@@ -12,7 +12,8 @@ public static class DynamicExecution
 
     private static readonly string codeTemplate =
         "using System; \n" +
-        "public class {0} {{\n" +
+        "using System.Text; \n" +
+        "public class {0} {{\n" + // We can add more namespaces.
         "\t{1}\n" +
         "}}";
 
