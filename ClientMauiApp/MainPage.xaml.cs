@@ -16,6 +16,7 @@ namespace ClientMauiApp
         {
             ExecuteCode.IsEnabled = true;
             ParameterEntries.Clear();
+            Result.Text = string.Empty;
             if (!string.IsNullOrEmpty(MethodEditor.Text?.Trim()))
             {
                 List<string> parameters = DynamicMethodExecution.ExtractParametersFromMethod(MethodEditor.Text);
