@@ -11,7 +11,7 @@ class Program
         Console.WriteLine("Enter C# method body:");
         string? methodBody = Console.ReadLine();
 
-        List<string> parameters = DynamicExecution.ExtractParametersFromMethod(methodBody);
+        List<string> parameters = DynamicMethodExecution.ExtractParametersFromMethod(methodBody);
 
         List<string>? parameterNames = null;
         List<string>? parameterValues = null;
@@ -29,14 +29,14 @@ class Program
                 parameterValues.Add(Console.ReadLine());
                 var paramSplitted = parameter?.Split(' ');
                 parameterNames.Add(paramSplitted.Last());
-                parameterTypes.Add(DynamicExecution.ConvertParameterTypeFromString(paramSplitted.First()));
+                parameterTypes.Add(DynamicMethodExecution.ConvertParameterTypeFromString(paramSplitted.First()));
             }
         }
 
         try
         {
             // Compile and execute the method with parameters
-            object? result = DynamicExecution.ExecuteMethod(methodBody,
+            object? result = DynamicMethodExecution.ExecuteMethod(methodBody,
                 parameterNames?.ToArray(), parameterValues?.ToArray(), parameterTypes?.ToArray());
 
             Console.WriteLine("Result: " + result);

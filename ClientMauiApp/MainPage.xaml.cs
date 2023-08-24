@@ -18,7 +18,7 @@ namespace ClientMauiApp
             ParameterEntries.Clear();
             if (!string.IsNullOrEmpty(MethodEditor.Text?.Trim()))
             {
-                List<string> parameters = DynamicExecution.ExtractParametersFromMethod(MethodEditor.Text);
+                List<string> parameters = DynamicMethodExecution.ExtractParametersFromMethod(MethodEditor.Text);
                 if (parameters.Any())
                 {
                     ParameterLabel.IsVisible = true;
@@ -49,7 +49,7 @@ namespace ClientMauiApp
 
             await Task.Delay(500);
 
-            List<string> parameters = DynamicExecution.ExtractParametersFromMethod(MethodEditor.Text);
+            List<string> parameters = DynamicMethodExecution.ExtractParametersFromMethod(MethodEditor.Text);
 
             List<string>? parameterNames = null;
             List<string>? parameterValues = null;
@@ -66,7 +66,7 @@ namespace ClientMauiApp
                     var paramSplitted = parameter?.Split(' ');
                     parameterNames.Add(paramSplitted.Last());
                     parameterValues.Add(ParameterEntries[index].Text);
-                    parameterTypes.Add(DynamicExecution.ConvertParameterTypeFromString(paramSplitted.First()));
+                    parameterTypes.Add(DynamicMethodExecution.ConvertParameterTypeFromString(paramSplitted.First()));
                     index++;
                 }
             }
@@ -74,7 +74,7 @@ namespace ClientMauiApp
             try
             {
                 // Compile and execute the method with parameters
-                object? result = DynamicExecution.ExecuteMethod(MethodEditor.Text,
+                object? result = DynamicMethodExecution.ExecuteMethod(MethodEditor.Text,
                     parameterNames?.ToArray(), parameterValues?.ToArray(), parameterTypes?.ToArray());
                 Result.Text = result.ToString();
             }

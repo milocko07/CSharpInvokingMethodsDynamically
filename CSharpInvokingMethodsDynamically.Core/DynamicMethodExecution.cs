@@ -6,9 +6,9 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
 /// <summary>
-/// Library that compiles and executes dynamically a c# method from a string input.
+/// Library that compiles and executes dynamically c# primitive methods from a string input.
 /// </summary>
-public static class DynamicExecution
+public static class DynamicMethodExecution
 {
     #region constants
     /// <summary>
