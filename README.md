@@ -4,7 +4,9 @@ This library demostrates how to invoke and run c# **primitive methods** dinimica
 **Maui app demo:**
 ![image](https://github.com/milocko07/CSharpInvokingMethodsDynamically/assets/37205551/88080c78-cd5d-4f06-b8a3-4d8c54e77914)
 
+
 ![image](https://github.com/milocko07/CSharpInvokingMethodsDynamically/assets/37205551/700741a5-dcb7-45f7-878a-72be99dbd30d)
+
 
 ![image](https://github.com/milocko07/CSharpInvokingMethodsDynamically/assets/37205551/4cc8103f-3de9-4049-a108-52a38a032e43)
 
@@ -18,9 +20,11 @@ Download code, open with Visual Studio 2022, compile and choose your client app 
 
 **Examples:**
 
+ ```csharp
 public static double SumDecimals(double param1,   double param2){ return param1 + param2; }
-
+```
 ---------------------------------------------------------------
+```csharp
 public static string CalculateFibonacciSeriesAsString(int n)
 {
     StringBuilder result = new StringBuilder();
@@ -42,8 +46,9 @@ public static string CalculateFibonacciSeriesAsString(int n)
     }
     return result.ToString();
 }
-
+```
 ---------------------------------------------------------------
+```csharp
 public static string CalcualteOdds(int number1, int number2)
 {
     var desde = number1;
@@ -60,3 +65,4 @@ public static string CalcualteOdds(int number1, int number2)
     }
     return primos;
 }
+```
