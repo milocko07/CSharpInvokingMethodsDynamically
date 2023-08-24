@@ -1,0 +1,16 @@
+
+*.vsidx
+.vs/CSharpInvokingMethodsDynamically/v17/.suo
+.vs/CSharpInvokingMethodsDynamically/FileContentIndex/read.lock
+*.dll
+*.exe
+*.bin
+*.v2
+*.pdb
+ClientMauiApp/bin/*
+ClientMauiApp/obj/*
+CSharpInvokingMethodsDynamically.ClientConsole/bin/*
+CSharpInvokingMethodsDynamically.ClientConsole/obj/*
+CSharpInvokingMethodsDynamically.Core/bin/*
+CSharpInvokingMethodsDynamically.Core/obj/*
+.vs/CSharpInvokingMethodsDynamically/v16/.suo

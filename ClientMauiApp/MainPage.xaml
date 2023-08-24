@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ClientMauiApp"
+             x:Class="ClientMauiApp.MainPage">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="EntryTemplate">
+            <Entry Placeholder="{Binding Placeholder}" Text="{Binding Text}" />
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Label Text="Enter C# method body:" FontAttributes="Bold"/>
+            <Editor x:Name="MethodEditor" HeightRequest="300" Completed="MethodEditor_Completed"/>
+
+            <Label x:Name="ParameterLabel" Text="Enter parameter values:" IsVisible="False" FontAttributes="Bold"/>
+
+            <CollectionView ItemsSource="{Binding ParameterEntries}" 
+                            ItemTemplate="{StaticResource EntryTemplate}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="1" />
+                </CollectionView.ItemsLayout>
+            </CollectionView>
+
+            <Button x:Name="ExecuteCode" Text="Execute Code" IsEnabled="False" Clicked="ExecuteCode_Clicked"/>
+            <Label x:Name="ResultLabel" Text="Result:" FontAttributes="Bold"/>
+            <Label x:Name="Result" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
